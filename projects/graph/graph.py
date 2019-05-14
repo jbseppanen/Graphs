@@ -115,23 +115,47 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        if visited is None:
-            visited = set()
-        if path is None:
-            path = []
-        visited.add(starting_vertex)
-        path.append(starting_vertex)
-        if starting_vertex == destination_vertex:
-            return path
-        if self.vertices[starting_vertex]:
-            for neighbor in self.vertices[starting_vertex]:
-                if neighbor not in visited:
-                    self.dfs(neighbor, destination_vertex, visited, path)
-        return path
+        # if visited is None:
+        #     visited = set()
+        # if path is None:
+        #     path = []
+        # visited.add(starting_vertex)
+        # path.append(starting_vertex)
+        # if self.vertices[starting_vertex]:
+        #     for neighbor in self.vertices[starting_vertex]:
+        #         if neighbor == destination_vertex:
+        #             path.append(neighbor)
+        #             return path
+        #         if neighbor not in visited:
+        #             self.dfs(neighbor, destination_vertex, visited, path)
+
+        s = Stack()
+        visited = set()
+        paths = [[starting_vertex]]
+        s.push(starting_vertex)
+        while s.size() > 0:
+            v = s.pop()
+            if v not in visited:
+                visited.add(v)
+                valid_paths = []
+                for path in paths:
+                    valid_paths = []
+                    last_item = path[len(path) - 1]
+                    if self.vertices[last_item]:
+                        for n in self.vertices[last_item]:
+                            current_path = path.copy()
+                            current_path.append(n)
+                            if n == destination_vertex:
+                                return current_path
+                            else:
+                                valid_paths.append(current_path)
+                                s.push(n)
+                paths = valid_paths
+        return None
 
 
-# if __name__ == '__main__':
-if True:
+if __name__ == '__main__':
+# if True:
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
     graph.add_vertex(1)
@@ -210,6 +234,4 @@ if True:
         [1, 2, 4, 7, 6]
     '''
     print("-----DFS------")
-    a = graph.dfs(1, 6)
-    print(a)
-    # print(graph.dfs(1, 6))
+    print(graph.dfs(1, 6))
