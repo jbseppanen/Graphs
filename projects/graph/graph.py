@@ -90,26 +90,23 @@ class Graph:
         paths = [[starting_vertex]]
         q.enqueue(starting_vertex)
         while q.size() > 0:
-            valid_paths = []
-            for path in paths:
-                valid_paths = []
-                last_item = path[len(path) - 1]
-                if self.vertices[last_item]:
-                    for n in self.vertices[last_item]:
-                        path.append(n)
-                        if n == destination_vertex:
-                            return path
-                        else:
-                            valid_paths.append(path)
-            paths = valid_paths
-
-
-            # Dequeue the first vertex
             v = q.dequeue()
-            # If it has not been visited...
             if v not in visited:
-                # Mark it as visited (print it and add it to the visited set
                 visited.add(v)
+                valid_paths = []
+                for path in paths:
+                    valid_paths = []
+                    last_item = path[len(path) - 1]
+                    if self.vertices[last_item]:
+                        for n in self.vertices[last_item]:
+                            current_path = path.copy()
+                            current_path.append(n)
+                            if n == destination_vertex:
+                                return current_path
+                            else:
+                                valid_paths.append(current_path)
+                                q.enqueue(n)
+                paths = valid_paths
         return None
 
     def dfs(self, starting_vertex, destination_vertex, visited=None, path=None):
@@ -130,6 +127,7 @@ class Graph:
             for neighbor in self.vertices[starting_vertex]:
                 if neighbor not in visited:
                     self.dfs(neighbor, destination_vertex, visited, path)
+        return path
 
 
 # if __name__ == '__main__':
@@ -212,4 +210,6 @@ if True:
         [1, 2, 4, 7, 6]
     '''
     print("-----DFS------")
-    print(graph.dfs(1, 6))
+    a = graph.dfs(1, 6)
+    print(a)
+    # print(graph.dfs(1, 6))
