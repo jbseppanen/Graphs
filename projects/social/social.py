@@ -63,7 +63,7 @@ class SocialGraph:
             friendship = possible_friendships[friendship_index]
             self.addFriendship(friendship[0], friendship[1])
 
-    def getAllSocialPaths(self, userID):
+    def getAllSocialPaths(self, user_id):
         """
         Takes a user's userID as an argument
 
@@ -74,8 +74,10 @@ class SocialGraph:
         """
         visited = {}
         for u in self.users:
-            if u != userID:
-                visited[u] = self.bfs(userID, u)
+            if u != user_id:
+                path = self.bfs(user_id, u)
+                if path is not None:
+                    visited[u] = path
         return visited
 
     def bfs(self, starting_user_id, dest_user_id):
