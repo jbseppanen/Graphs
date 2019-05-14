@@ -109,26 +109,28 @@ class Graph:
                 paths = valid_paths
         return None
 
+    def bfs1(self, starting_vertex, destination_vertex):
+        q = Queue()
+        visited = set()
+        q.enqueue([starting_vertex])
+        while q.size() > 0:
+            path = q.dequeue()
+            v = path[-1]
+            if v == destination_vertex:
+                return path
+            if v not in visited:
+                visited.add(v)
+                for neighbor in self.vertices[v]:
+                    path_copy = path.copy()
+                    path_copy.append(neighbor)
+                    q.enqueue(path_copy)
+
     def dfs(self, starting_vertex, destination_vertex, visited=None, path=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        # if visited is None:
-        #     visited = set()
-        # if path is None:
-        #     path = []
-        # visited.add(starting_vertex)
-        # path.append(starting_vertex)
-        # if self.vertices[starting_vertex]:
-        #     for neighbor in self.vertices[starting_vertex]:
-        #         if neighbor == destination_vertex:
-        #             path.append(neighbor)
-        #             return path
-        #         if neighbor not in visited:
-        #             self.dfs(neighbor, destination_vertex, visited, path)
-
         s = Stack()
         visited = set()
         paths = [[starting_vertex]]
@@ -153,9 +155,24 @@ class Graph:
                 paths = valid_paths
         return None
 
+    def dfs1(self, starting_vertex, destination_vertex, visited=None, path=None):
+        s = Stack()
+        visited = set()
+        s.push([starting_vertex])
+        while s.size() > 0:
+            path = s.pop()
+            v = path[-1]
+            if v == destination_vertex:
+                return path
+            if v not in visited:
+                visited.add(v)
+                for neighbor in self.vertices[v]:
+                    path_copy = path.copy()
+                    path_copy.append(neighbor)
+                    s.push(path_copy)
+
 
 if __name__ == '__main__':
-# if True:
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
     graph.add_vertex(1)
